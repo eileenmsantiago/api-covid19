@@ -32,7 +32,6 @@ app.get('/api/covid/all', (req, res) => {
                         countries[code] = location;
                     }
                 })
-
         
                 const sortedLocations = Object
                     .values(countries)
@@ -76,7 +75,6 @@ app.get('/api/covid/country', (req, res) => {
             }
         }
     );
-
 });
 
 // app.post('/api/world', (req, res) => {
@@ -97,3 +95,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
+// app.use('/.netlify/functions/api', router);
+
+// module.exports.handler = serverless(app);

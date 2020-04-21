@@ -34,10 +34,10 @@ const Country = (props) => {
 
     return (
         <div className="COVID">
-            <header className="COVID-header">
-                <h1>Latest COVID Data</h1>
-            </header>
-            <CountrySelector onCountrySelected={countrySelected}/>
+            <div className="COVID__select">
+                <p>To start, select a country to view it's latest number of cases</p>
+                <CountrySelector onCountrySelected={countrySelected}/>
+            </div>
             <p>{!hasData ? 'No data found for country!' : ''}</p>
             <div className="graph">
                 <div className="graph__wrapper">

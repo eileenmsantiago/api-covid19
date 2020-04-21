@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import All from './Pages/All/All';
 import Country from './Pages/Country/Country';
+import Nav from './Components/Nav/Nav';
 
 class App extends Component {
   state = {
@@ -17,6 +18,7 @@ class App extends Component {
     return (
       <Router>
       <div className="App">
+        <Nav/>
           <Switch>
             <Route path="/" exact component={All} />
             <Route path="/country" component={Country} />

@@ -1,0 +1,461 @@
+swagger: "2.0"
+info:
+  description: "This is a COVID-19 data server."
+  version: "1.0.0"
+  title: "Global Data on COVID-19 Cases "
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "eileenmvs@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "covid19.swagger.io"
+basePath: "/v2"
+tags:
+- name: "country"
+  description: "Details of COVID-19 cases per country"
+- name: "region"
+  description: "Details of COVID-19 cases in country region"
+- name: "case"
+  description: "Manifest log of COVID-19 cases"
+- name: "tracker"
+  description: "Track registered covid-19 cases within a radius"
+- name: "user"
+  description: "Operations about user inputting COVID-19 data"
+schemes:
+- "https"
+- "http"
+
+paths:
+  /country:
+    get:
+      tags:
+      - "country"
+      summary: "Get all countries"
+      description: "Returns a list of all countries with COVID-19 cases"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Country"
+        400:
+          description: "Invalid request"
+        404:
+          description: "Request not found"
+  /country/{countryCode}:
+    get:
+      tags:
+      - "country"
+      summary: "Find country by country code"
+      description: "Returns data for requested country"
+      parameters:
+      - name: "countryCode"
+        in: "path"
+        description: "Two letter code of country"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Country"
+  /region:
+    post:
+      tags:
+      - "region"
+      summary: "Creates a region with newly confirmed cases of COVID-19"
+      consumes:
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        description: "Region object"
+        schema:
+            $ref: "#/definitions/Region"
+      responses:
+        default:
+          description: "successful operation"
+  /region/{regionCode}:
+    get:
+      tags:
+      - "region"
+      summary: "Find region by region code"
+      description: "Returns data for requested region"
+      parameters:
+      - name: "regionCode"
+        in: "path"
+        description: "Two letter code of region for country"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Region"
+    put:
+      tags:
+      - "region"
+      summary: "Update data for cases in region"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - name: "regionCode"
+        in: "path"
+        description: "Two letter code of region for country"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Region model"
+        required: true
+        schema:
+          $ref: "#/definitions/Region"
+      responses:
+        default:
+          description: "successful operation"
+    delete:
+      tags:
+      - "region"
+      summary: "Delete region by region code"
+      description: "remove region no longer containing COVID-19 cases"
+      parameters:
+      - name: "regionCode"
+        in: "path"
+        description: "Two letter code of region for country"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+  /case:
+    post:
+      tags:
+      - "case"
+      summary: "Creates a COVID-19 case."
+      consumes:
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        description: "Case model"
+        schema:
+            $ref: "#/definitions/Case"
+      responses:
+        default:
+          description: "successful operation"
+  /case/{caseId}:
+    get:
+      tags:
+      - "case"
+      summary: "Find details of COVID-19 case"
+      description: "Returns data for requested details of case"
+      parameters:
+      - name: "caseId"
+        in: "path"
+        description: "caseId of case to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Case"
+    put:
+      tags:
+      - "case"
+      summary: "Find details of COVID-19 case"
+      description: "Returns data for requested details of case"
+      parameters:
+      - name: "caseId"
+        in: "path"
+        description: "caseId of case to update"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Case model to update new information"
+        required: true
+        schema:
+          $ref: "#/definitions/Case"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Case"
+    delete:
+      tags:
+      - "case"
+      summary: "Find details of COVID-19 case"
+      description: "Returns data for requested details of case"
+      parameters:
+      - name: "caseId"
+        in: "path"
+        description: "caseId of case to delete"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Case"
+  /tracker:
+    get:
+      tags:
+      - "tracker"
+      summary: "Get confirmed cases within a specfied radius"
+      description: "Given a current location, tracker will return all known registered cases within the provided radius"
+      parameters:
+      - name: "radius"
+        in: "query"
+        description: "radius in km"
+        required: true
+        type: "integer"
+      - name: "latitude"
+        in: "query"
+        description: "latitude of current location"
+        required: true
+        type: "number"
+      - name: "longitude"
+        in: "query"
+        description: "longitude of current location"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Case"
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      description: "Create user with correct permissions. Admins can create health officials. Health officials can create cases."
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "successful operation"
+        401:
+          description: "Unauthorized. You are not permitted to create a user with your current permission type"
+  /user/login:
+    get:
+      tags:
+      - "user"
+      summary: "Logs user into the system"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "The user name for login"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login in clear text"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+        400:
+          description: "Invalid username/password supplied"
+  /user/logout:
+    get:
+      tags:
+      - "user"
+      summary: "Logs out current logged in user session"
+      description: ""
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+  /user/{userId}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by id"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "id of user to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+    put:
+      tags:
+      - "user"
+      summary: "Updated user"
+      description: "This can only be done by the logged in user or user with higher permission group"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "name that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Invalid user supplied"
+        404:
+          description: "User not found"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+securityDefinitions:
+  covid_auth:
+    type: "oauth2"
+    authorizationUrl: "http://covid19.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:cases: "modify cases in your account"
+      read:cases: "read your cases"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Country:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      code:
+        type: "string"
+      confirmed:
+        type: "integer"
+      deaths:
+        type: "integer"
+      recovered:
+        type: "integer"
+      regions:
+        type: "array"
+        items:
+          type: "integer"
+  Region:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      code:
+        type: "string"
+      confirmed:
+        type: "integer"
+      deaths:
+        type: "integer"
+      recovered:
+        type: "integer"
+  Case:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      userId:
+        type: "integer"
+      regoinId:
+        type: "integer"
+      healthStatus:
+        type: "string"
+        enum:
+        - "confirmed"
+        - "recovered"
+        - "deceased"
+      assignedDesignation:
+        type: "string"
+        enum: 
+        - "self-isolation"
+        - "hospital-ICU"
+      latitude:
+        type: "number"
+      longitude:
+        type: "number"
+      lastCheckedDate:
+        type: "string"
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      type:
+        type: "string"
+        enum:
+        - "admin"
+        - "healthOfficial"
+        - "citizen"
+      username:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+      affiliatedInstitution:
+        type: "string"

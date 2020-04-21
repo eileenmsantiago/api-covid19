@@ -1,7 +1,14 @@
+body {
+    font-size: 1.6em;
+    font-weight: 400;
+    letter-spacing: .01em;
+    line-height: 1.6;
+}
+
 .COVID {
   min-height: 100vh;
   text-align: center;
-  font-size: calc(10px + 2vmin);
+  // font-size: calc(10px + 2vmin);
   &-header {
     background-color: #282c34;
     display: flex;
@@ -13,9 +20,11 @@
   }
 }
 
-.COVID-logo {
-  height: 40vmin;
-  pointer-events: none;
+select {
+  max-width: 50%;
+  &:focus {
+    border-color: $color-secondary-orange;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -24,16 +33,3 @@
   }
 }
 
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}

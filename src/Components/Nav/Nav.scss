@@ -1,0 +1,24 @@
+.nav {
+    display: flex;
+
+    &-logo {
+        margin: auto;
+        padding: 2rem;
+    }
+
+    &-list {
+        position: absolute;
+        text-decoration: none;
+        right: 0;
+        list-style: none;
+        li {
+            display: inline-block;
+            margin: 2rem;
+            margin-left: auto;
+            margin-right: 2.5rem;
+        }
+    }
+    &__text-link {
+        @include links() 
+    }
+}
