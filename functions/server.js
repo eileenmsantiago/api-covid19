@@ -8,7 +8,12 @@ const BASE_URL = "https://coronavirus-tracker-api.herokuapp.com/v2";
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/api/covid/all', (req, res) => {
+let BASE_API = '/.netlify/functions/server/';
+// if(process.env.NODE_ENV !== "development") {  
+//     BASE_API = '/.netlify/functions/server/';
+// }
+
+app.get(`${BASE_API}api/covid/all`, (req, res) => {
 
     request(
         `${BASE_URL}/locations`,
@@ -55,7 +60,7 @@ app.get('/api/covid/all', (req, res) => {
     );
 });
 
-app.get('/api/covid/country', (req, res) => {
+app.get(`${BASE_API}api/covid/country`, (req, res) => {
 
     request(
         `${BASE_URL}/locations?country_code=${req.query.code.toUpperCase()}&timelines=1`,
