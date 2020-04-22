@@ -2,12 +2,17 @@ import React from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
+let BASE_API = '/';
+if(process.env.NODE_ENV !== "development") {  
+    BASE_API = '/.netlify/functions/server/';
+}
+
 const All = (props) => {
 
     const [cases, setCases] = useState([]);
 
     const getAll = async (countryCode) => {
-        const response = await fetch(`/api/covid/all`);
+        const response = await fetch(`${BASE_API}api/covid/all`);
         const body = await response.json();
         
         if(body.data.length > 0) {

@@ -20,6 +20,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "request": "^2.88.2",
+    "serverless-http": "^2.3.2",
     "swagger-ui": "^3.25.0",
     "unirest": "^0.6.0"
   },

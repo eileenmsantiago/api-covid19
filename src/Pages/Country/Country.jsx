@@ -3,13 +3,18 @@ import randomColor from 'randomcolor/randomColor';
 import LineGraph from '../../Components/LineGraph/LineGraph';
 import CountrySelector from '../../Components/CountrySelector/CountrySelector';
 
+let BASE_API = '/';
+if(process.env.NODE_ENV !== "development") {  
+    BASE_API = '/.netlify/functions/server/';
+}
+
 const Country = (props) => {
 
     const [chartData, setChartData] = useState({});
     const [hasData, setHasData] = useState(true);
 
     const countrySelected = async (countryCode) => {
-        const response = await fetch(`/api/covid/country?code=${countryCode}`);
+        const response = await fetch(`${BASE_API}api/covid/country?code=${countryCode}`);
         const body = await response.json();
         
         if(body.data.length > 0) {
