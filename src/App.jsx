@@ -12,7 +12,7 @@ class App extends Component {
     chartData: {},
     post: '',
     responseToPost: '',
-  }; 
+  };
   
   render() {
     return (
